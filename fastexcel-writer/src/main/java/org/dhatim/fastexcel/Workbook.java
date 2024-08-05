@@ -330,10 +330,12 @@ public class Workbook implements Closeable {
                 for (Map.Entry<String, Range> nr : ws.getNamedRanges().entrySet()) {
                     String rangeName = nr.getKey();
                     Range range = nr.getValue();
-                    w.append("<definedName function=\"false\" " +
-                                    "hidden=\"false\" localSheetId=\"")
-                            .append(worksheetIndex)
-                            .append("\" name=\"")
+                    w.append("<definedName function=\"false\" hidden=\"false\"");
+                    if (range.isGlobalVisibility()) {
+                        w.append(" localSheetId=\"")
+                         .append(worksheetIndex).append("\"");
+                    }
+                    w.append(" name=\"")
                             .append(rangeName)
                             .append("\" vbProcedure=\"false\">'")
                             .appendEscaped(ws.getName())

@@ -45,6 +45,11 @@ public class Range implements Ref {
     private final int right;
 
     /**
+     * Check about the Range visibility when a named range is added.
+     */
+    private boolean globalVisibility = false;
+
+    /**
      * Constructor. Note coordinates are reordered if necessary to make sure
      * {@code top} &lt;= {@code bottom} and {@code left} &lt;= {@code right}.
      *
@@ -201,6 +206,18 @@ public class Range implements Ref {
         return listDataValidation;
     }
 
+    /**
+     * Construct a new ListDataValidation
+     *
+     * @param formula The Formula to retrieve the validation list
+     * @return a new list data validation object
+     */
+    public ListFormulaDataValidation validateWithListByFormula(String formula) {
+        ListFormulaDataValidation listDataValidation = new ListFormulaDataValidation(this, new Formula(formula));
+        worksheet.addValidation(listDataValidation);
+        return listDataValidation;
+    }
+
      /**
      * Construct a new ListDataValidation
      *
@@ -221,6 +238,25 @@ public class Range implements Ref {
      */
     public void setName(String name) {
         worksheet.addNamedRange(this, name);
+    }
+
+    /**
+     * Return the visibility of this range.
+     *
+     * @return {@code true} if the range is visible by all worksheet, {@code false} if it is visible only by the worksheet contains the range
+     */
+    public boolean isGlobalVisibility() {
+        return globalVisibility;
+    }
+
+    /**
+     * Set the visibility of this range
+     *
+     * @param globalVisibility {@code true} to allow to see the range by all worksheet
+     */
+    public Range setGlobalVisibility(boolean globalVisibility) {
+        this.globalVisibility = globalVisibility;
+        return this;
     }
 
     /**
